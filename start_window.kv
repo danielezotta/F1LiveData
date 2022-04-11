@@ -1,4 +1,5 @@
-<StartWindow>
+<StartScreen>
+
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -25,7 +26,7 @@
         Spinner:
             id: driver_select
             text: "Select driver"
-            values: ["Latoifi 1", "Latoifi 2"]
+            values: []
             font_size: 32
             on_text: root.driver_clicked(driver_select.text)
 

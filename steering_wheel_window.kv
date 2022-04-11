@@ -1,0 +1,46 @@
+<SteeringWheelScreen>
+
+    ScatterLayout:
+        size: root.width, root.height
+        padding: 32
+        spacing: 16
+
+        Label:
+            id: gear_label
+            text: "8"
+            font_size: 96
+            pos: 0, 0
+
+        Label:
+            id: rpm_label
+            text: "11500"
+            font_size: 40
+            pos: 0, 80
+
+        Label:
+            id: spd_label
+            text: "323"
+            font_size: 40
+            pos: -200, 20
+
+        Button:
+            id: start_button
+            text: "START"
+            font_size: 20
+            pos: 360, 20
+            size_hint: .1, .1
+            on_press: root.start_telemetry()
+
+        Button:
+            id: exit_button
+            text: "<-  BACK"
+            font_size: 12
+            pos: 20, 550
+            size_hint: .1, .05
+            on_press: root.exit_back()
+
+        Label:
+            id: info_label
+            text: ""
+            font_size: 16
+            pos: 0, 260

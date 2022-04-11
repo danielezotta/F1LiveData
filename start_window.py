@@ -1,28 +1,28 @@
-
 from kivy.lang import Builder
-from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import ScreenManager, Screen
 import fastf1
+import globals
 
 
-Builder.load_file('start_window.kv')
-
-
-class StartWindow(Widget):
+class StartScreen(Screen):
+    kv = Builder.load_file('start_window.kv')
 
     def __init__(self, **kwargs):
-        super().__init__()
-        self.circuit_number = None
-        self.driver_number = None
+        super().__init__(**kwargs)
+        self.get_circuits()
 
     def driver_clicked(self, value):
-        self.driver_number = int(value.split(' - ')[0])
+        globals.driver_number = int(value.split(' - ')[0])
+        globals.driver_name = str(value.split(' - ')[1])
 
     def circuit_clicked(self, value):
         self.get_drivers(2022, value)
-        self.circuit_number = int(value.split('.')[0])
+        globals.circuit_number = int(value.split('.')[0])
+        globals.circuit_name = str(value.split('. ')[1])
 
     def start_clicked(self):
-        if self.circuit_number is not None and self.driver_number is not None:
+        if globals.circuit_number is not None and globals.driver_number is not None:
+            self.manager.current = "steering"
             print("START")
 
     def get_circuits(self):
