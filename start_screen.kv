@@ -1,0 +1,13 @@
+<StartScreen>
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 32
+        spacing: 16
+
+        Button:
+            id: quali_label
+            text: "Qualification steering wheel"
+            font_size: 28
+            on_release: root.quali_steering_clicked()

@@ -11,6 +11,9 @@ class QualiWheelScreen(Screen):
         super().__init__(**kwargs)
         self.get_circuits()
 
+    def exit_back(self):
+        self.manager.current = "start"
+
     def driver_clicked(self, value):
         globals.driver_number = int(value.split(' - ')[0])
         globals.driver_name = str(value.split(' - ')[1])
@@ -22,7 +25,7 @@ class QualiWheelScreen(Screen):
 
     def start_clicked(self):
         if globals.circuit_number is not None and globals.driver_number is not None:
-            self.manager.current = "steering"
+            self.manager.current = "quali_steering_data"
             print("START")
 
     def get_circuits(self):
@@ -34,7 +37,7 @@ class QualiWheelScreen(Screen):
                 events.append('%d. %s' % (i, fastf1.get_event(2022, i)['EventName']))
                 print(fastf1.get_event(2022, i)['EventName'])
         except:
-            print("No more races")
+            pass
 
         self.ids.quali_select.values = events
 

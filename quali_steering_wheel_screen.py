@@ -71,5 +71,5 @@ class QualiSteeringWheelScreen(Screen):
             self.simulation_going = False
 
     def exit_back(self):
-        self.manager.current = "start"
+        self.manager.current = "quali_steering"
 
