@@ -1,0 +1,37 @@
+<QualiWheelScreen>
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 32
+        spacing: 16
+
+        Label:
+            id: quali_label
+            text: "Qualification"
+            font_size: 32
+
+        Spinner:
+            id: quali_select
+            text: "Select circuit"
+            values: []
+            font_size: 32
+            on_text: root.circuit_clicked(quali_select.text)
+
+        Label:
+            id: driver_label
+            text: "Driver"
+            font_size: 32
+
+        Spinner:
+            id: driver_select
+            text: "Select driver"
+            values: []
+            font_size: 32
+            on_text: root.driver_clicked(driver_select.text)
+
+        Button:
+            id: button_start
+            text: "START"
+            font_size: 36
+            on_release: root.start_clicked()

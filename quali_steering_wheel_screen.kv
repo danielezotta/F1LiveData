@@ -1,0 +1,52 @@
+<QualiSteeringWheelScreen>
+
+    ScatterLayout:
+        size: root.width, root.height
+        padding: 32
+        spacing: 16
+
+        Label:
+            id: gear_label
+            text: "N"
+            font_size: 96
+            pos: 0, 0
+
+        Label:
+            id: rpm_label
+            text: "-----"
+            font_size: 40
+            pos: 0, 80
+
+        Label:
+            id: spd_label
+            text: "---"
+            font_size: 40
+            pos: -200, 20
+
+        Button:
+            id: start_button
+            text: "LOADING ..."
+            font_size: 20
+            pos: 320, 20
+            size_hint: .2, .1
+            on_press: root.start_telemetry()
+
+        Button:
+            id: exit_button
+            text: "<-  BACK"
+            font_size: 12
+            pos: 20, 550
+            size_hint: .1, .05
+            on_press: root.exit_back()
+
+        Label:
+            id: info_label
+            text: ""
+            font_size: 16
+            pos: 0, 260
+
+        Label:
+            id: time_label
+            text: ""
+            font_size: 16
+            pos: 0, 240

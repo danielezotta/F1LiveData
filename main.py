@@ -1,27 +1,23 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.lang import Builder
-from start_window import StartScreen
-from steering_wheel_window import SteeringWheelScreen
+from quali_wheel_screen import QualiWheelScreen
+from quali_steering_wheel_screen import QualiSteeringWheelScreen
 import fastf1
 import globals
-
-
-class WindowManager(ScreenManager):  # creating a class that deals with screen management
-    pass
 
 
 class F1LiveData(App):
 
     def __init__(self):
         super().__init__()
-        self.screen_manager = WindowManager()
+        self.screen_manager = ScreenManager(transition=NoTransition())
 
     def build(self):
-        start_screen = StartScreen(name="start")
-        self.screen_manager.add_widget(start_screen)
-        steering_wheel_screen = SteeringWheelScreen(name="steering")
-        self.screen_manager.add_widget(steering_wheel_screen)
+        quali_wheel_screen = QualiWheelScreen(name="start")
+        self.screen_manager.add_widget(quali_wheel_screen)
+        quali_steering_wheel_screen = QualiSteeringWheelScreen(name="steering")
+        self.screen_manager.add_widget(quali_steering_wheel_screen)
         return self.screen_manager
 
 
