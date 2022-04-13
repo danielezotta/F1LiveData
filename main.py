@@ -6,6 +6,9 @@ from quali_wheel_screen import QualiWheelScreen
 from quali_steering_wheel_screen import QualiSteeringWheelScreen
 import fastf1
 import globals
+from kivy.config import Config
+
+Config.set('graphics', 'resizable', False)
 
 
 class F1LiveData(App):

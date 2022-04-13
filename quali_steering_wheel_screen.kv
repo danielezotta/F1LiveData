@@ -5,23 +5,79 @@
         padding: 32
         spacing: 16
 
+        Image:
+            source: 'mask.png'
+            size: 600, 600
+            allow_stretch: False
+
         Label:
             id: gear_label
             text: "N"
+            bold: True
             font_size: 96
-            pos: 0, 0
+            pos: 0, 20
 
         Label:
             id: rpm_label
             text: "-----"
-            font_size: 40
-            pos: 0, 80
+            bold: True
+            color: 1,0,0,1
+            font_size: 46
+            pos: 0, 115
 
         Label:
+            text: "SPEED"
+            font_size: 11
+            bold: True
+            pos: -250, 70
+
+        Label:
+            text_size: self.size
             id: spd_label
             text: "---"
+            bold: True
+            halign: 'right'
             font_size: 40
-            pos: -200, 20
+            pos: -570, 320
+
+        Label:
+            id: time_session_label
+            text: "40:22"
+            bold: True
+            color: 1,1,0,1
+            font_size: 22
+            pos: 0, -70
+
+        Label:
+            id: latest_lap_label
+            text: "-:--.---"
+            bold: True
+            color: 0,1,0,1
+            font_size: 32
+            pos: -185, 115
+
+        Label:
+            id: delta_label
+            text: "-.--"
+            bold: True
+            color: 0,1,0,1
+            font_size: 44
+            pos: 200, 115
+
+        Label:
+            text: "LAP"
+            font_size: 11
+            bold: True
+            pos: -256, 5
+
+        Label:
+            text_size: self.size
+            id: laps_session_label
+            text: "5"
+            halign: 'right'
+            bold: True
+            font_size: 40
+            pos: -570, 256
 
         Button:
             id: start_button
