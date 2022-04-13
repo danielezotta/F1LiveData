@@ -17,6 +17,14 @@ and you are good to go
 
 ### Qualification Steering Wheel
 
+![Alt text](preview/quali_steering_wheel_preview.gif?raw=true "Option preview")
+
 Shows the steering wheel of the selected driver and circuit for the quali lap, with the informations available. 
 As it stands, the steering wheel is the one from the Ferrari F1-75.
 
+Things not working (mostly because not found in database):
+- tyre temperature
+- brake balance
+- session time
+- state of charge
+- any quali from 2021 and back and anyone in the future (_working on it_)
