@@ -32,7 +32,7 @@ class QualiWheelScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.get_circuits()
+        self.ids.year_select.values = ["2019", "2020", "2021", "2022"]
 
     def exit_back(self):
         self.manager.current = "start"
@@ -41,10 +41,14 @@ class QualiWheelScreen(Screen):
         globals.driver_number = int(value.split(' - ')[0])
         globals.driver_name = str(value.split(' - ')[1])
 
+    def year_clicked(self, value):
+        globals.year = int(value)
+        self.get_circuits()
+
     def circuit_clicked(self, value):
-        self.get_drivers(2022, value)
         globals.circuit_number = int(value.split('.')[0])
         globals.circuit_name = str(value.split('. ')[1])
+        self.get_drivers(globals.year, value)
 
     def start_clicked(self):
         if globals.circuit_number is not None and globals.driver_number is not None:
@@ -57,8 +61,8 @@ class QualiWheelScreen(Screen):
 
         try:
             for i in range(1, 30):
-                events.append('%d. %s' % (i, fastf1.get_event(2022, i)['EventName']))
-                print(fastf1.get_event(2022, i)['EventName'])
+                events.append('%d. %s' % (i, fastf1.get_event(globals.year, i)['EventName']))
+                print(fastf1.get_event(globals.year, i)['EventName'])
         except:
             pass
 
@@ -68,7 +72,7 @@ class QualiWheelScreen(Screen):
 
         drivers = []
 
-        session = fastf1.get_session(year, int(event.split('.')[0]), 'Q')
+        session = fastf1.get_session(year, globals.circuit_number, 'Q')
         session.load(telemetry=False, laps=False, weather=False)
         api_drivers = fastf1.api.driver_info(session.api_path)
 

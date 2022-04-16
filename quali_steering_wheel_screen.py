@@ -27,11 +27,13 @@ from kivy.uix.screenmanager import Screen
 import fastf1
 from fastf1 import utils as fastf1utils
 import globals
+import time
 
 Builder.load_file('quali_steering_wheel_screen.kv')
 
 
 class QualiSteeringWheelScreen(Screen):
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.lap = None
@@ -53,6 +55,8 @@ class QualiSteeringWheelScreen(Screen):
         self.lap_number = None
         self.lap_delta = None
         self.delta_time = None
+        self.start_time = None
+        self.end_time = None
 
     def on_enter(self, *args):
         self.loading_data = True
@@ -61,7 +65,7 @@ class QualiSteeringWheelScreen(Screen):
         Clock.schedule_once(self.get_lap, 1)
 
     def get_lap(self, dt):
-        session = fastf1.get_session(2022, globals.circuit_number, 'Q')
+        session = fastf1.get_session(globals.year, globals.circuit_number, 'Q')
         session.load(laps=True, telemetry=True, weather=True)
         laps = session.laps.pick_driver(globals.driver_number)
         accurate_laps = laps.pick_quicklaps().pick_accurate()
@@ -85,8 +89,10 @@ class QualiSteeringWheelScreen(Screen):
 
         self.delta_time, ref_tel, compare_tel = fastf1utils.delta_time(self.lap_delta, self.lap)
 
-        self.data_frequency = self.lap_time / len(self.lap_speed)
-        self.delta_frequency = self.lap_time / len(self.delta_time)
+        self.data_frequency = round(self.lap_time / (len(self.lap_speed)-(len(self.lap_speed) * 0.010)), 4)
+        self.delta_frequency = self.lap_time / (len(self.delta_time)-(len(self.delta_time) * 0.010))
+        print(self.data_frequency)
+        print(len(self.lap_speed))
         self.delta_index = self.delta_time.keys()[0]
         self.start_index = self.lap_speed.keys()[0]
         self.end_index = self.lap_speed.keys()[-1]
@@ -103,6 +109,8 @@ class QualiSteeringWheelScreen(Screen):
             Clock.unschedule(self.interval)
             self.ids.start_button.text = "START"
             self.simulation_going = False
+            self.end_time = time.time()
+            print(self.end_time-self.start_time)
 
     def start_delta(self, dt):
         if self.delta_index < self.delta_time.keys()[-1]:
@@ -124,6 +132,7 @@ class QualiSteeringWheelScreen(Screen):
             self.ids.laps_session_label.text = str(self.lap_number)
             self.interval = Clock.schedule_interval(self.start_preview, self.data_frequency)
             self.delta_interval = Clock.schedule_interval(self.start_delta, self.delta_frequency)
+            self.start_time = time.time()
         elif self.simulation_going:
             Clock.unschedule(self.interval)
             Clock.unschedule(self.delta_interval)

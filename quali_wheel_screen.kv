@@ -13,6 +13,13 @@
             size_hint: .25, .5
             on_release: root.exit_back()
 
+        Spinner:
+            id: year_select
+            text: "Select year"
+            values: []
+            font_size: 32
+            on_text: root.year_clicked(year_select.text)
+
         Label:
             id: quali_label
             text: "Qualification"
