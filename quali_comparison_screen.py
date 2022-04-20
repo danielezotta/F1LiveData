@@ -27,8 +27,8 @@ import fastf1
 import globals
 
 
-class QualiWheelScreen(Screen):
-    kv = Builder.load_file('quali_wheel_screen.kv')
+class QualiComparisonScreen(Screen):
+    kv = Builder.load_file('quali_comparison_screen.kv')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -37,9 +37,13 @@ class QualiWheelScreen(Screen):
     def exit_back(self):
         self.manager.current = "start"
 
-    def driver_clicked(self, value):
+    def driver1_clicked(self, value):
         globals.driver_number = int(value.split(' - ')[0])
         globals.driver_name = str(value.split(' - ')[1])
+
+    def driver2_clicked(self, value):
+        globals.driver2_number = int(value.split(' - ')[0])
+        globals.driver2_name = str(value.split(' - ')[1])
 
     def year_clicked(self, value):
         globals.year = int(value)
@@ -51,7 +55,7 @@ class QualiWheelScreen(Screen):
         self.get_drivers(globals.year, value)
 
     def start_clicked(self):
-        if globals.circuit_number is not None and globals.driver_number is not None:
+        if globals.circuit_number is not None and globals.driver_number is not None and globals.circuit2_number is not None and globals.driver2_number is not None:
             self.manager.current = "quali_steering_data"
             print("START")
 
@@ -79,4 +83,5 @@ class QualiWheelScreen(Screen):
         for driver in api_drivers.values():
             drivers.append('%s - %s' % (driver['RacingNumber'], driver['FullName']))
 
-        self.ids.driver_select.values = drivers
+        self.ids.driver1_select.values = drivers
+        self.ids.driver2_select.values = drivers

@@ -33,3 +33,6 @@ class StartScreen(Screen):
 
     def quali_steering_clicked(self):
         self.manager.current = "quali_steering"
+
+    def quali_circuit_comp(self):
+        self.manager.current = "quali_comparison"

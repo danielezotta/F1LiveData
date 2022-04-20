@@ -27,4 +27,3 @@ Things not working (mostly because not found in database):
 - brake balance
 - session time
 - state of charge
-- any quali from 2021 and back and anyone in the future (_working on it_)

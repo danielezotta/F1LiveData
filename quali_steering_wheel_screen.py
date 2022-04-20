@@ -91,8 +91,6 @@ class QualiSteeringWheelScreen(Screen):
 
         self.data_frequency = round(self.lap_time / (len(self.lap_speed)-(len(self.lap_speed) * 0.010)), 4)
         self.delta_frequency = self.lap_time / (len(self.delta_time)-(len(self.delta_time) * 0.010))
-        print(self.data_frequency)
-        print(len(self.lap_speed))
         self.delta_index = self.delta_time.keys()[0]
         self.start_index = self.lap_speed.keys()[0]
         self.end_index = self.lap_speed.keys()[-1]

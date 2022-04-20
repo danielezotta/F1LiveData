@@ -23,6 +23,8 @@ OTHER DEALINGS IN THE SOFTWARE. """
 
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
+
+from quali_comparison_screen import QualiComparisonScreen
 from start_screen import StartScreen
 from quali_wheel_screen import QualiWheelScreen
 from quali_steering_wheel_screen import QualiSteeringWheelScreen
@@ -46,6 +48,8 @@ class F1LiveData(App):
         self.screen_manager.add_widget(quali_wheel_screen)
         quali_steering_wheel_screen = QualiSteeringWheelScreen(name="quali_steering_data")
         self.screen_manager.add_widget(quali_steering_wheel_screen)
+        quali_comparison_screen = QualiComparisonScreen(name="quali_comparison")
+        self.screen_manager.add_widget(quali_comparison_screen)
         return self.screen_manager
 
 
