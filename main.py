@@ -21,18 +21,21 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE. """
 
+
+from kivy.config import Config
+# Needs to be here, otherwise wont work
+Config.set('graphics', 'resizable', False)
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 
+from quali_comparison_circuit_screen import QualiComparisonCircuitScreen
 from quali_comparison_screen import QualiComparisonScreen
 from start_screen import StartScreen
 from quali_wheel_screen import QualiWheelScreen
 from quali_steering_wheel_screen import QualiSteeringWheelScreen
 import fastf1
 import globals
-from kivy.config import Config
-
-Config.set('graphics', 'resizable', False)
 
 
 class F1LiveData(App):
@@ -50,6 +53,8 @@ class F1LiveData(App):
         self.screen_manager.add_widget(quali_steering_wheel_screen)
         quali_comparison_screen = QualiComparisonScreen(name="quali_comparison")
         self.screen_manager.add_widget(quali_comparison_screen)
+        quali_comparison_circuit_screen = QualiComparisonCircuitScreen(name="quali_comparison_circuit")
+        self.screen_manager.add_widget(quali_comparison_circuit_screen)
         return self.screen_manager
 
 

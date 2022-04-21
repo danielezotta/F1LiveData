@@ -23,6 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE. """
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from kivy.core.window import Window
 import fastf1
 import globals
 
@@ -33,6 +34,9 @@ class QualiComparisonScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.ids.year_select.values = ["2018", "2019", "2020", "2021", "2022"]
+
+    def on_pre_enter(self, *args):
+        Window.size = (800, 600)
 
     def exit_back(self):
         self.manager.current = "start"
@@ -55,8 +59,8 @@ class QualiComparisonScreen(Screen):
         self.get_drivers(globals.year, value)
 
     def start_clicked(self):
-        if globals.circuit_number is not None and globals.driver_number is not None and globals.circuit2_number is not None and globals.driver2_number is not None:
-            self.manager.current = "quali_steering_data"
+        if globals.circuit_number is not None and globals.driver_number is not None and globals.driver2_number is not None:
+            self.manager.current = "quali_comparison_circuit"
             print("START")
 
     def get_circuits(self):
@@ -66,7 +70,6 @@ class QualiComparisonScreen(Screen):
         try:
             for i in range(1, 30):
                 events.append('%d. %s' % (i, fastf1.get_event(globals.year, i)['EventName']))
-                print(fastf1.get_event(globals.year, i)['EventName'])
         except:
             pass
 
