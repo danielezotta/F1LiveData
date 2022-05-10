@@ -44,10 +44,20 @@ class QualiComparisonCircuitScreen(Screen):
         self.lap_driver_two = None
         self.loading_data = None
         self.simulation_going = None
+        self.data_frequency_one = None
+        self.data_frequency_two = None
         self.plot_canvas = None
+        self.point1 = None
+        self.point2 = None
+        self.anim1 = None
+        self.anim2 = None
+        self.interval_one = None
+        self.interval_two = None
+        self.pos_index_one = None
+        self.pos_index_two = None
 
     def on_pre_enter(self, *args):
-        Window.size = (1000, 1000)
+        Window.size = (1000, 800)
 
     def on_enter(self, *args):
         self.loading_data = True
@@ -66,36 +76,50 @@ class QualiComparisonCircuitScreen(Screen):
         self.loading_data = False
         self.ids.info_label.text = '%s - %s | %s - %s' % (globals.driver_name, str(self.lap_driver_one['LapTime']).replace("0 days 00:", "").replace("000", ""), str(self.lap_driver_two['LapTime']).replace("0 days 00:", "").replace("000", ""), globals.driver2_name)
 
-        print(self.lap_driver_one.telemetry['X'])
+        self.data_frequency_one = round(self.lap_driver_one['LapTime'].total_seconds() / self.lap_driver_one.telemetry['X'].size, 4)
+        self.data_frequency_two = round(self.lap_driver_two['LapTime'].total_seconds() / self.lap_driver_two.telemetry['X'].size, 4)
+
+        self.pos_index_one = self.lap_driver_one.telemetry['X'].keys()[0]
+        self.pos_index_two = self.lap_driver_two.telemetry['X'].keys()[0]
 
         # create a figure with an axes
-        fig, ax = plt.subplots()
+        self.fig, ax = plt.subplots(num=None, figsize=(12, 12), dpi=80, facecolor='black', edgecolor='k')
+        self.fig.canvas.set_window_title('%s | %s' % (globals.driver_name, globals.driver2_name))
+        self.fig.canvas.toolbar.pack_forget()
         # set equal aspect such that the circle is not shown as ellipse
         ax.set_aspect("equal")
         ax.axis('off')
         # create a point in the axes
-        self.point1, = ax.plot(self.lap_driver_one.telemetry['X'][8], self.lap_driver_one.telemetry['Y'][8], marker="o")
+        self.point1, = ax.plot(self.lap_driver_one.telemetry['X'][8], self.lap_driver_one.telemetry['Y'][8], marker="o", ms=14, color='Red')
+        self.point2, = ax.plot(self.lap_driver_two.telemetry['X'][8], self.lap_driver_two.telemetry['Y'][8], marker="o", ms=14, color='Lightblue')
 
-        ax.plot(self.lap_driver_one.telemetry['X'], self.lap_driver_one.telemetry['Y'], linewidth=3, zorder=0, color='black')
-        ax.plot(self.lap_driver_two.telemetry['X'], self.lap_driver_two.telemetry['Y'], linewidth=3, zorder=0, color='black')
-        # self.point1, = plt.plot(self.lap_driver_one.telemetry['X'][8], self.lap_driver_one.telemetry['Y'][8], marker="o", markersize=12, markerfacecolor="green")
-        # self.point2, = plt.plot(self.lap_driver_one.telemetry['X'][8], self.lap_driver_one.telemetry['Y'][8], marker="o", markersize=12, markerfacecolor="red")
-        # fig = plt.figure()
-        self.anim = animation.FuncAnimation(fig, self.animate, frames=len(self.lap_driver_one.telemetry['X']), interval=130, blit=True)
-        # self.plot_canvas = FigureCanvasKivyAgg(plt.gcf())
-        # self.ids.plot.add_widget(self.plot_canvas)
-        plt.show()
+        ax.plot(self.lap_driver_one.telemetry['X'], self.lap_driver_one.telemetry['Y'], linewidth=5, zorder=0, color='white')
+        ax.plot(self.lap_driver_two.telemetry['X'], self.lap_driver_two.telemetry['Y'], linewidth=5, zorder=0, color='white')
 
-    def animate(self, i):
-        self.point1.set_data([self.lap_driver_one.telemetry['X'][i+8]], [self.lap_driver_one.telemetry['Y'][i+8]])
-        return self.point1,
-        # self.plot_canvas = FigureCanvasKivyAgg(plt.gcf())
+        self.driver_one_interval = (self.lap_driver_one['LapTime'].total_seconds() / self.lap_driver_one.telemetry['X'].size) * 1000
+        self.driver_two_interval = (self.lap_driver_two['LapTime'].total_seconds() / self.lap_driver_two.telemetry['X'].size) * 1000
+        self.plot_canvas = FigureCanvasKivyAgg(self.fig)
+        self.ids.plot.add_widget(self.plot_canvas)
 
-    def start_preview(self, dt):
-        if self.start_index < self.lap_speed.keys()[-1]:
-            self.start_index += 1
+        # plt.show()
+
+    def start_preview_one(self, dt):
+        if self.pos_index_one < self.lap_driver_one.telemetry['X'].size:
+            self.point1.set_data([self.lap_driver_one.telemetry['X'].iloc[self.pos_index_one]], [self.lap_driver_one.telemetry['Y'].iloc[self.pos_index_one]])
+            self.fig.canvas.draw()
+            self.pos_index_one += 1
         else:
-            Clock.unschedule(self.interval)
+            Clock.unschedule(self.interval_one)
+            self.ids.start_button.text = "START"
+            self.simulation_going = False
+
+    def start_preview_two(self, dt):
+        if self.pos_index_two < self.lap_driver_two.telemetry['X'].size:
+            self.point2.set_data([self.lap_driver_two.telemetry['X'].iloc[self.pos_index_two]], [self.lap_driver_two.telemetry['Y'].iloc[self.pos_index_two]])
+            self.fig.canvas.draw()
+            self.pos_index_two += 1
+        else:
+            Clock.unschedule(self.interval_two)
             self.ids.start_button.text = "START"
             self.simulation_going = False
 
@@ -115,10 +139,12 @@ class QualiComparisonCircuitScreen(Screen):
         if not self.loading_data and not self.simulation_going:
             self.ids.start_button.text = "STOP"
             self.simulation_going = True
-            self.interval = Clock.schedule_interval(self.start_preview, self.data_frequency)
-            self.delta_interval = Clock.schedule_interval(self.start_delta, self.delta_frequency)
+            self.interval_one = Clock.schedule_interval(self.start_preview_one, self.data_frequency_one)
+            self.interval_two = Clock.schedule_interval(self.start_preview_two, self.data_frequency_two)
+            # self.delta_interval = Clock.schedule_interval(self.start_delta, self.delta_frequency)
         elif self.simulation_going:
-            Clock.unschedule(self.interval)
+            Clock.unschedule(self.interval_one)
+            Clock.unschedule(self.interval_two)
             Clock.unschedule(self.delta_interval)
             self.ids.start_button.text = "START"
             self.simulation_going = False
