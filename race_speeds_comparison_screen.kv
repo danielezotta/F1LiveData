@@ -1,0 +1,36 @@
+<RaceSpeedsComparisonScreen>
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        padding: 32
+        spacing: 16
+
+        Button:
+            id: exit_button
+            text: "<-  BACK"
+            font_size: 12
+            on_release: root.exit_back()
+            size_hint_y: 0.025
+            size_hint_x: 0.25
+
+        Label:
+            id: info_label
+            text: "Loading..."
+            markup: True
+            font_size: 20
+            size_hint_y: 0.025
+
+        GridLayout:
+            id: stats_layout
+            cols: 3
+            row_default_height: 64
+
+        ScrollView:
+            GridLayout:
+                id: grid_layout
+                size_hint_y: None
+                height: self.minimum_height  #<<<<<<<<<<<<<<<<<<<<
+                cols: 5
+                row_default_height: 64
+

@@ -28,6 +28,7 @@ import fastf1
 from fastf1 import utils as fastf1utils
 import globals
 import time
+import threading
 
 Builder.load_file('quali_steering_wheel_screen.kv')
 
@@ -89,7 +90,8 @@ class QualiSteeringWheelScreen(Screen):
 
         self.delta_time, ref_tel, compare_tel = fastf1utils.delta_time(self.lap_delta, self.lap)
 
-        self.data_frequency = round(self.lap_time / (len(self.lap_speed)-(len(self.lap_speed) * 0.010)), 4)
+        # self.data_frequency = round(self.lap_time / (len(self.lap_speed)-(len(self.lap_speed) * 0.010)), 4)
+        self.data_frequency = self.lap_time / self.lap_speed.size
         self.delta_frequency = self.lap_time / (len(self.delta_time)-(len(self.delta_time) * 0.010))
         self.delta_index = self.delta_time.keys()[0]
         self.start_index = self.lap_speed.keys()[0]
@@ -97,17 +99,35 @@ class QualiSteeringWheelScreen(Screen):
         self.ids.start_button.text = "START"
         self.loading_data = False
 
-    def start_preview(self, dt):
-        if self.start_index < self.lap_speed.keys()[-1]:
-            self.start_index += 1
-            self.ids.spd_label.text = str(self.lap_speed[self.start_index])
-            self.ids.rpm_label.text = str(self.rpm_engine[self.start_index])
-            self.ids.gear_label.text = str(self.gear[self.start_index])
+    # def start_preview(self, dt):
+    #     if self.start_index < self.lap_speed.size:
+    #         self.start_index += 1
+    #         self.ids.spd_label.text = str(self.lap_speed[self.start_index])
+    #         self.ids.rpm_label.text = str(self.rpm_engine[self.start_index])
+    #         self.ids.gear_label.text = str(self.gear[self.start_index])
+    #     else:
+    #         Clock.unschedule(self.interval)
+    #         self.ids.start_button.text = "START"
+    #         self.simulation_going = False
+    #         self.end_time = time.time()
+    #         print(self.start_index)
+    #         print(self.end_time-self.start_time)
+
+    def start_preview(self):
+        if self.start_index < self.lap_speed.size:
+            if time.time() - self.start_time >= self.data_frequency:
+                # print(time.time() - self.start_time)
+                self.start_index += 1
+                self.ids.spd_label.text = str(self.lap_speed[self.start_index])
+                self.ids.rpm_label.text = str(self.rpm_engine[self.start_index])
+                self.ids.gear_label.text = str(self.gear[self.start_index])
+                self.start_time = time.time()
         else:
-            Clock.unschedule(self.interval)
+            # Clock.unschedule(self.interval)
             self.ids.start_button.text = "START"
             self.simulation_going = False
             self.end_time = time.time()
+            print(self.start_index)
             print(self.end_time-self.start_time)
 
     def start_delta(self, dt):
@@ -122,15 +142,22 @@ class QualiSteeringWheelScreen(Screen):
         else:
             Clock.unschedule(self.delta_interval)
 
+    def preview_loop(self):
+        while(self.simulation_going):
+            self.start_preview()
+
     def start_telemetry(self):
         if not self.loading_data and not self.simulation_going:
             self.ids.start_button.text = "STOP"
             self.simulation_going = True
             self.ids.latest_lap_label.text = self.prev_lap
             self.ids.laps_session_label.text = str(self.lap_number)
-            self.interval = Clock.schedule_interval(self.start_preview, self.data_frequency)
+            # self.interval = Clock.schedule_interval(self.start_preview, self.data_frequency)
             self.delta_interval = Clock.schedule_interval(self.start_delta, self.delta_frequency)
             self.start_time = time.time()
+            threading.Thread(target=self.preview_loop, args=()).start()
+            # while (self.simulation_going):
+            #     self.start_preview()
         elif self.simulation_going:
             Clock.unschedule(self.interval)
             Clock.unschedule(self.delta_interval)

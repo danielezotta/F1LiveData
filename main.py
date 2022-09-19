@@ -24,6 +24,9 @@ OTHER DEALINGS IN THE SOFTWARE. """
 
 from kivy.config import Config
 # Needs to be here, otherwise wont work
+from race_speeds_comparison import RaceSpeedComparison
+from race_speeds_comparison_screen import RaceSpeedsComparisonScreen
+
 Config.set('graphics', 'resizable', False)
 
 from kivy.app import App
@@ -55,6 +58,10 @@ class F1LiveData(App):
         self.screen_manager.add_widget(quali_comparison_screen)
         quali_comparison_circuit_screen = QualiComparisonCircuitScreen(name="quali_comparison_circuit")
         self.screen_manager.add_widget(quali_comparison_circuit_screen)
+        race_speeds_comparison = RaceSpeedComparison(name="race_speeds_comparison")
+        self.screen_manager.add_widget(race_speeds_comparison)
+        race_speeds_comparison_screen = RaceSpeedsComparisonScreen(name="race_speeds_comparison_screen")
+        self.screen_manager.add_widget(race_speeds_comparison_screen)
         return self.screen_manager
 
 

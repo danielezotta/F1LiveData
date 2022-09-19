@@ -36,3 +36,6 @@ class StartScreen(Screen):
 
     def quali_circuit_comp(self):
         self.manager.current = "quali_comparison"
+
+    def race_speed_comp(self):
+        self.manager.current = "race_speeds_comparison"

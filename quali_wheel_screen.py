@@ -53,7 +53,6 @@ class QualiWheelScreen(Screen):
     def start_clicked(self):
         if globals.circuit_number is not None and globals.driver_number is not None:
             self.manager.current = "quali_steering_data"
-            print("START")
 
     def get_circuits(self):
 
@@ -62,7 +61,6 @@ class QualiWheelScreen(Screen):
         try:
             for i in range(1, 30):
                 events.append('%d. %s' % (i, fastf1.get_event(globals.year, i)['EventName']))
-                print(fastf1.get_event(globals.year, i)['EventName'])
         except:
             pass
 

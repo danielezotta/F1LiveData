@@ -15,7 +15,7 @@ and you are good to go
 
 ## Options
 
-### Qualification Steering Wheel
+### Qualification steering sheel
 
 ![Alt text](preview/quali_steering_wheel_preview.gif?raw=true "Option preview")
 
@@ -27,3 +27,21 @@ Things not working (mostly because not found in database):
 - brake balance
 - session time
 - state of charge
+
+### Qualification circuit comparison (still alpha)
+
+Shows a map with the circuit and two dots representing the two drivers selected for the qualifying. 
+For now is lagging between samples, but the objective is to move them smoothly.
+
+### Race speed comparison
+
+![Alt text](preview/race_speed_comparison_preview.png?raw=true "Option preview")
+
+Shows all the registered speeds for two drivers during the selected race, lap by lap.
+The speedtraps names are:
+- SpeedI1 : speedtrap at the intermediate 1
+- SpeedI2 : speedtrap at the intermediate 2
+- SpeedFL : speedtrap at the finish line
+- SpeedST : speedtrap at the intermediate 1
+
+The averages are computed on all not nan values, for each driver.

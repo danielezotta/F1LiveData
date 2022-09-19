@@ -24,8 +24,12 @@ OTHER DEALINGS IN THE SOFTWARE. """
 
 driver_number = None
 driver_name = None
+driver_team = None
+driver_color = None
 driver2_number = None
 driver2_name = None
+driver2_team = None
+driver2_color = None
 circuit_number = None
 circuit_name = None
 year = None
@@ -40,8 +44,16 @@ def init():
     circuit_number = None
     global driver_name
     driver_name = None
+    global driver_color
+    driver_color = None
     global driver2_name
     driver2_name = None
+    global driver_team
+    driver_team = None
+    global driver2_team
+    driver2_team = None
+    global driver2_color
+    driver2_color = None
     global circuit_name
     circuit_name = None
     global year
